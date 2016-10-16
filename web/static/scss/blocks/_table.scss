@@ -1,0 +1,16 @@
+.table {
+  $border-color: darken(map-get($colors, light), 20%);
+  $header-color: darken(map-get($colors, light), 10%);
+
+  border-collapse: collapse;
+
+  &__header {
+    background-color: $header-color;
+  }
+
+  &__header,
+  &__cell {
+    padding: 0 .5em;
+    border: 1px solid $border-color;
+  }
+}

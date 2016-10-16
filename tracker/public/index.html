@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Aly</title>
+  </head>
+  <body>
+    <button id="button">Test</button>
+    <script src="http://localhost:4000/js/aly.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      var aly = aly({
+        url: 'http://localhost:4000',
+      });
+
+      aly.call(['event=pageview']);
+
+      document.querySelector('#button').addEventListener('click', function() {
+        aly.call(['event=signup']);
+      });
+    </script>
+  </body>
+</html>

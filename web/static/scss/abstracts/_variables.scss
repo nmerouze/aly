@@ -1,0 +1,19 @@
+$colors: (
+  light: rgb(255, 255, 255),
+  text: rgb(50, 50, 50),
+  main: rgb(171, 87, 135),
+);
+
+$font-family: 'Roboto', sans-serif;
+
+$ms-ratio: 1.23;
+
+$breakpoints: (
+  small: 40em,
+  large: 60em,
+);
+
+$typi: (
+  null: (16px, 1.5),
+  large: 18px
+);

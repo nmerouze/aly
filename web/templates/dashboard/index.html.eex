@@ -1,0 +1,6 @@
+<h1>Funnels</h1>
+<%= for funnel <- @funnels do %>
+  <div>
+    <%= link funnel.name, to: funnel_path(@conn, :show, funnel) %>
+  </div>
+<% end %>

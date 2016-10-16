@@ -1,0 +1,15 @@
+options:
+  formatter: stylish
+files:
+  include: 'web/static/scss/**/*.s+(a|c)ss'
+rules:
+  class-name-format:
+    - 1
+    - convention: hyphenatedbem
+
+  force-pseudo-nesting: 0
+  no-css-comments: 0
+
+  property-sort-order:
+    - 1
+    - order: smacss

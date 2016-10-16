@@ -1,0 +1,18 @@
+.header {
+  $border-color: darken(map-get($colors, light), 10%);
+  $title-color: map-get($colors, text);
+
+  display: flex;
+  align-items: center;
+  padding: vr(.5) 2em;
+  border-bottom: 2px solid $border-color;
+
+  &__title {
+    flex: 1;
+    margin: 0;
+    color: $title-color;
+    font-size: ms(2);
+    font-weight: 700;
+    text-decoration: none;
+  }
+}

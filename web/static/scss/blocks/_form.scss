@@ -1,0 +1,22 @@
+.form {
+  $border-color: darken(map-get($colors, light), 10%);
+
+  &__label {
+    font-weight: 700;
+  }
+
+  &__textInput {
+    border: 1px solid $border-color;
+  }
+
+  &__textArea {
+    border: 1px solid $border-color;
+  }
+
+  &__textInput,
+  &__textArea {
+    display: block;
+    width: 50%;
+    margin: vr(.25) 0 vr(.75);
+  }
+}

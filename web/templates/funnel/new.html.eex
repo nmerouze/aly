@@ -1,0 +1,11 @@
+<h1>Define a new funnel</h1>
+
+<%= form_for @changeset, funnel_path(@conn, :create), [class: "form"], fn f -> %>
+  <%= label f, :name, [class: "form__label"] %>
+  <%= text_input f, :name, [class: "form__textInput"] %>
+
+  <%= label f, :steps, [class: "form__label"] %>
+  <%= textarea f, :steps, [class: "form__textArea", value: format_steps(@changeset.changes.steps)] %>
+
+  <%= submit "Create funnel", [class: "button"] %>
+<% end %>
