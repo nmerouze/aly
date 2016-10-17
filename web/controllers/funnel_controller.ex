@@ -11,12 +11,7 @@ defmodule Aly.FunnelController do
 
   def show(conn, %{"id" => id}) do
     funnel = Repo.get!(Funnel, id)
-
-    steps =
-      EventQuery.funnel(funnel.steps)
-      |> Enum.with_index
-      |> Enum.map(fn({v, i}) -> %{number: i + 1, name: Enum.at(funnel.steps, i)["event"], count: v} end)
-
+    steps = EventQuery.funnel(funnel.steps)
     render conn, "show.html", funnel: funnel, steps: steps
   end
 

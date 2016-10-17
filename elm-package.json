@@ -1,7 +1,7 @@
 {
     "version": "1.0.0",
     "summary": "Open-Source Application for Funnel Analysis",
-    "repository": "https://github.com/nicolasmerouze/aly.git",
+    "repository": "https://github.com/nmerouze/aly.git",
     "license": "MPL-2.0",
     "source-directories": [
         "."

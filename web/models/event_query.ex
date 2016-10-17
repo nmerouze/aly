@@ -20,6 +20,8 @@ defmodule Aly.EventQuery do
     |> Map.get(:rows)
     |> Enum.at(0)
     |> Enum.at(0)
+    |> Enum.with_index
+    |> Enum.map(fn({v, i}) -> %{number: i + 1, name: Enum.at(steps, i)["event"], count: v} end)
   end
 
   defp from do
