@@ -12,8 +12,8 @@ config :logger, level: :warn
 # Configure your database
 config :aly, Aly.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "nicolas",
+  password: "",
   database: "aly_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox

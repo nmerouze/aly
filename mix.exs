@@ -32,7 +32,7 @@ defmodule Aly.Mixfile do
   defp deps do
     [{:phoenix, "~> 1.2.0"},
      {:phoenix_pubsub, "~> 1.0"},
-     {:phoenix_ecto, "~> 3.1.0-rc"},
+     {:phoenix_ecto, "~> 3.0.0"},
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
@@ -40,7 +40,8 @@ defmodule Aly.Mixfile do
      {:cowboy, "~> 1.0"},
      {:corsica, "~> 0.4"},
      {:distillery, "~> 0.9"},
-     {:poison, "~> 2.0"}]
+     {:poison, "~> 2.0"},
+     {:ex_machina, "~> 1.0", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
