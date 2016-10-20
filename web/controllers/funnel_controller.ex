@@ -1,8 +1,7 @@
 defmodule Aly.FunnelController do
   use Aly.Web, :controller
 
-  alias Aly.Funnel
-  alias Aly.EventQuery
+  alias Aly.{Funnel, EventQuery}
 
   def new(conn, _params) do
     changeset = Funnel.changeset(%Funnel{}, %{steps: []})

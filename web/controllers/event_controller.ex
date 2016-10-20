@@ -1,9 +1,7 @@
 defmodule Aly.EventController do
   use Aly.Web, :controller
 
-  alias Aly.Event
-  alias Aly.Session
-  alias Aly.SessionQuery
+  alias Aly.{Event, Session, SessionQuery}
 
   @spec create(Plug.Conn.t, {String.t, String.t}) :: no_return
   def create(conn, %{"session_id" => client_id, "event" => event}) do

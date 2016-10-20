@@ -1,7 +1,6 @@
 defmodule Aly.ProjectControllerTest do
   use Aly.ConnCase, async: true
 
-  # import Aly.Factory
   alias Aly.{Repo, Event, Session}
 
   describe "create/2" do
