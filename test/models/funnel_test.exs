@@ -9,6 +9,7 @@ defmodule Aly.FunnelTest do
   test "changeset with valid attributes" do
     changeset = Funnel.changeset(%Funnel{}, @valid_attrs)
     assert changeset.valid?
+    assert changeset.changes.steps == [%{"event" => "pageview"}, %{"event" => "signup"}]
   end
 
   test "changeset with invalid attributes" do
