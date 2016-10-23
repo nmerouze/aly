@@ -20,3 +20,5 @@ elm-stuff
 priv/static/css/app.css
 priv/static/js/*.js
 TODO.md
+typings
+tracker/test/*.js

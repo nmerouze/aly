@@ -12,10 +12,12 @@
         url: 'http://localhost:4000',
       });
 
-      aly.call(['event=pageview']);
+      var sessionID = aly.getSessionID();
+
+      aly.call(['event=pageview', 'session_id=' + sessionID]);
 
       document.querySelector('#button').addEventListener('click', function() {
-        aly.call(['event=signup']);
+        aly.call(['event=signup', 'session_id=' + sessionID]);
       });
     </script>
   </body>

@@ -1,37 +1,20 @@
-import generateID from './generateID';
+import aly, { Header } from "./aly";
 
 interface Config {
   url: string;
 }
 
-interface CallFunc {
-  (params: Array<string>): void;
-}
+const request = (method: string, url: string, headers: Array<Header>, params: string) => {
+  const httpRequest = new XMLHttpRequest();
+  httpRequest.open(method, url, true);
+  headers.forEach(header => {
+    httpRequest.setRequestHeader(header.key, header.value);
+  });
+  httpRequest.send(params);
+};
 
-interface Aly {
-  call: CallFunc;
-}
+const clientAly = (config: Config) => {
+  return aly({ url: config.url, cookie: document.cookie, request });
+};
 
-const getSessionID = () => {
-  let sessionID: string = document.cookie.replace(/(?:(?:^|.*;\s*)_aly\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-  if (sessionID === "") {
-    sessionID = generateID();
-    document.cookie = `_aly=${sessionID}`;
-  }
-
-  return sessionID;
-}
-
-const aly = (config: Config): Aly => {
-  const call = (params: Array<string>): void => {
-    params.push(`session_id=${getSessionID()}`);
-    const httpRequest = new XMLHttpRequest();
-    httpRequest.open("POST", `${config.url}/api/events`, true);
-    httpRequest.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    httpRequest.send(params.join("&"));
-  };
-
-  return { call };
-}
-
-(<any>window).aly = aly;
+(<any>window).aly = clientAly;

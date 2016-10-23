@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es3",
+    "module": "commonjs",
+    "sourceMap": true
+  },
+  "include": [
+    "tracker/src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "typings/index.d.ts"
+  ]
+}

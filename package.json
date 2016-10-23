@@ -11,23 +11,26 @@
     "tracker:watch": "./node_modules/.bin/webpack -w --config webpack.tracker.js",
     "tracker:release": "./node_modules/.bin/webpack -p --config webpack.tracker.js",
     "setup": "npm run build:release && npm run tracker:release",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --opts mocha.opts"
   },
   "author": "Nicolas Merouze <nicolas@merouze.me> (https://www.nicolasmerouze.com)",
   "license": "MPL-2.0",
   "dependencies": {
     "autoprefixer-loader": "^3.2.0",
+    "chai": "^3.5.0",
     "css-loader": "^0.25.0",
     "elm-webpack-loader": "^3.0.6",
     "extract-text-webpack-plugin": "^1.0.1",
+    "mocha": "^3.1.2",
     "modularscale-sass": "^2.1.1",
     "node-sass": "^3.10.0",
     "normalize.css": "^4.2.0",
     "sass-loader": "^4.0.2",
-    "style-loader": "^0.13.1",
-    "typi": "^2.3.0",
-    "webpack": "^1.13.2",
     "source-map-loader": "^0.1.5",
-    "ts-loader": "^0.8.2"
+    "style-loader": "^0.13.1",
+    "ts-loader": "^0.8.2",
+    "ts-node": "^1.6.0",
+    "typi": "^2.3.0",
+    "webpack": "^1.13.2"
   }
 }
