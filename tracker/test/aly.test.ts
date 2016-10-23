@@ -1,12 +1,17 @@
 /// <reference path="../../typings/index.d.ts" />
 import { expect } from "chai";
-import aly, { Header } from "../src/aly";
+import aly, { Header, Data } from "../src/aly";
 
-const mockRequest = (method: string, url: string, headers: Array<Header>, params: string) => {};
+const mockRequest = (method: string, url: string, headers: Array<Header>, params: Data) => {};
 
 describe("aly", () => {
   it('sends a request to API', () => {
-    const request = (method: string, url: string, headers: Array<Header>, params: string) => {
+    const data = {
+      event: "pageview",
+      session_id: "abc123",
+    };
+
+    const request = (method: string, url: string, headers: Array<Header>, params: Data) => {
       expect(method).to.eq("POST");
       expect(url).to.eq("http://localhost/api/events");
       expect(headers).to.deep.equal([
@@ -15,11 +20,11 @@ describe("aly", () => {
           value: "application/x-www-form-urlencoded",
         },
       ]);
-      expect(params).to.eq("event=pageview");
+      expect(params).to.eq(data);
     };
 
-    const tracker = aly({ url: 'http://localhost', cookie: "", request });
-    tracker.call(['event=pageview']);
+    const tracker = aly({ url: "http://localhost", cookie: "", request });
+    tracker.call(data);
   });
 
   it("parses session id from cookie", () => {

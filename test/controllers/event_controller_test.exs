@@ -1,16 +1,16 @@
 defmodule Aly.ProjectControllerTest do
   use Aly.ConnCase, async: true
 
-  alias Aly.{Repo, Event, Session}
+  alias Aly.{Repo, Event, Session, EventData}
 
   describe "create/2" do
     test "creates event and session", %{conn: conn} do
-      params = %{
-        session_id: "befvon",
-        event: "pageview"
-      }
+      data =
+        %EventData{ event: "pageview", session_id: "befvon" }
+        |> Poison.encode!
+        |> Base.encode64
 
-      response = post(conn, "/api/events", params)
+      response = post(conn, "/api/events", %{"data" => data})
       assert response.status == 201
       event = Repo.one!(Event)
       session = Repo.get!(Session, event.session_id)
@@ -22,12 +22,12 @@ defmodule Aly.ProjectControllerTest do
     test "creates event with existing session", %{conn: conn} do
       session = Repo.insert!(Session.changeset(%Session{}, %{client_id: "befvon"}))
 
-      params = %{
-        session_id: session.client_id,
-        event: "pageview"
-      }
+      data =
+        %EventData{ event: "pageview", session_id: session.client_id }
+        |> Poison.encode!
+        |> Base.encode64
 
-      response = post(conn, "/api/events", params)
+      response = post(conn, "/api/events", %{"data" => data})
       assert response.status == 201
       event = Repo.one!(Event)
       assert event.name == "pageview"
@@ -35,9 +35,19 @@ defmodule Aly.ProjectControllerTest do
     end
 
     test "fails", %{conn: conn} do
-      response = post(conn, "/api/events", %{ session_id: "befvon", event: "" })
+      data1 =
+        %EventData{ session_id: "befvon", event: "" }
+        |> Poison.encode!
+        |> Base.encode64
+
+      data2 =
+        %EventData{ session_id: "", event: "pageview" }
+        |> Poison.encode!
+        |> Base.encode64
+
+      response = post(conn, "/api/events", %{"data" => data1})
       assert response.status == 400
-      response = post(conn, "/api/events", %{ session_id: "", event: "pageview" })
+      response = post(conn, "/api/events", %{"data" => data2})
       assert response.status == 400
     end
   end

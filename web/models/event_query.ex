@@ -1,6 +1,4 @@
 defmodule Aly.EventQuery do
-  import Ecto.Query
-
   def funnel(steps) do
     params = Enum.map(steps, fn(v) -> v["event"] end)
 

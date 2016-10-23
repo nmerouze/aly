@@ -5,8 +5,13 @@ export interface Header {
   value: string;
 }
 
+export interface Data {
+  event: string;
+  session_id: string;
+}
+
 interface Request {
-  (method: string, url: string, headers: Array<Header>, params: string);
+  (method: string, url: string, headers: Array<Header>, params: Data);
 }
 
 interface Config {
@@ -16,7 +21,7 @@ interface Config {
 }
 
 interface CallFunc {
-  (params: Array<string>): void;
+  (params: Data): void;
 }
 
 interface GetSessionFunc {
@@ -41,7 +46,7 @@ const getSessionID = (): string => {
   return sessionID;
 }
 
-const call = (params: Array<string>): void => {
+const call = (params: Data): void => {
   const headers = [
     {
       key: "Content-Type",
@@ -49,7 +54,7 @@ const call = (params: Array<string>): void => {
     },
   ];
 
-  alyConfig.request("POST", `${alyConfig.url}/api/events`, headers, params.join("&"));
+  alyConfig.request("POST", `${alyConfig.url}/api/events`, headers, params);
 };
 
 const aly = (config: Config): Aly => {

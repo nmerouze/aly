@@ -1,13 +1,18 @@
 defmodule Aly.EventController do
   use Aly.Web, :controller
 
-  alias Aly.{Event, Session, SessionQuery}
+  alias Aly.{Event, EventData, Session, SessionQuery}
 
-  @spec create(Plug.Conn.t, {String.t, String.t}) :: no_return
-  def create(conn, %{"session_id" => client_id, "event" => event}) do
-    case Repo.one(SessionQuery.by_client_id(client_id)) do
-      nil -> insert_session(conn, event, client_id)
-      session -> insert_event(conn, event, session.id)
+  @spec create(Plug.Conn.t, {String.t}) :: no_return
+  def create(conn, %{"data" => data}) do
+    event_data =
+      data
+      |> Base.decode64!
+      |> Poison.decode!(as: %EventData{})
+
+    case Repo.one(SessionQuery.by_client_id(event_data.session_id)) do
+      nil -> insert_session(conn, event_data.event, event_data.session_id)
+      session -> insert_event(conn, event_data.event, session.id)
     end
   end
 
