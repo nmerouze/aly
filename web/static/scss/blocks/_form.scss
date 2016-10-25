@@ -1,5 +1,5 @@
 .form {
-  $border-color: darken(map-get($colors, light), 10%);
+  $border-color: darken(c(light), 10%);
 
   &__label {
     font-weight: 700;

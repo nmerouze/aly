@@ -1,6 +1,6 @@
 .table {
-  $border-color: darken(map-get($colors, light), 20%);
-  $header-color: darken(map-get($colors, light), 10%);
+  $border-color: darken(c(light), 20%);
+  $header-color: darken(c(light), 10%);
 
   border-collapse: collapse;
 

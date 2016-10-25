@@ -1,6 +1,6 @@
 .chart {
-  $border-color: darken(map-get($colors, light), 10%);
-  $bar-color: map-get($colors, main);
+  $border-color: darken(c(light), 10%);
+  $bar-color: c(main);
 
   display: flex;
   align-items: flex-end;

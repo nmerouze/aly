@@ -1,6 +1,6 @@
 .header {
-  $border-color: darken(map-get($colors, light), 10%);
-  $title-color: map-get($colors, text);
+  $border-color: darken(c(light), 10%);
+  $title-color: c(text);
 
   display: flex;
   align-items: center;

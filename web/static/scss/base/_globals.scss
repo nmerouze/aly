@@ -5,7 +5,7 @@ html {
 }
 
 body {
-  color: map-get($colors, text);
+  color: c(text);
   font-family: $font-family;
 }
 
@@ -16,5 +16,5 @@ body {
 }
 
 a {
-  color: map-get($colors, main);
+  color: c(main);
 }

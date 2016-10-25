@@ -1,0 +1,17 @@
+@function get($map, $keys: null) {
+  @if ($keys) {
+    @each $key in $keys {
+      $map: map-get($map, $key);
+    }
+  }
+
+  @return $map;
+}
+
+@function color($keys) {
+  @return get($colors, $keys);
+}
+
+@function c($keys) {
+  @return color($keys);
+}
