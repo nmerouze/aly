@@ -3,7 +3,7 @@ defmodule Aly.Event do
 
   schema "events" do
     field :name, :string
-    field :properties, {:array, :map}
+    field :properties, :map
     belongs_to :session, Aly.Session
     timestamps
   end

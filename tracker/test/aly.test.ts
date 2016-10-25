@@ -9,6 +9,9 @@ describe("aly", () => {
     const data = {
       event: "pageview",
       session_id: "abc123",
+      properties: {
+        title: "foobar",
+      }
     };
 
     const request = (method: string, url: string, headers: Array<Header>, params: Data) => {

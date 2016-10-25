@@ -16,13 +16,19 @@
 
       aly.call({
         event: 'pageview',
-        session_id: sessionID
+        session_id: sessionID,
+        properties: {
+          title: 'Landing Page'
+        }
       });
 
       document.querySelector('#button').addEventListener('click', function() {
         aly.call({
           event: 'signup',
-          session_id: sessionID
+          session_id: sessionID,
+          properties: {
+            title: 'Landing Page'
+          }
         });
       });
     </script>

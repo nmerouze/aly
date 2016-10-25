@@ -5,7 +5,7 @@ defmodule Aly.Repo.Migrations.CreateEvents do
     create table(:events) do
       add :name, :string
       add :session_id, references(:sessions)
-      add :properties, {:array, :map}, default: []
+      add :properties, :map
       timestamps
     end
   end

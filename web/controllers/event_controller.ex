@@ -11,16 +11,17 @@ defmodule Aly.EventController do
       |> Poison.decode!(as: %EventData{})
 
     case Repo.one(SessionQuery.by_client_id(event_data.session_id)) do
-      nil -> insert_session(conn, event_data.event, event_data.session_id)
-      session -> insert_event(conn, event_data.event, session.id)
+      nil -> insert_session(conn, event_data)
+      session -> insert_event(conn, Map.put(event_data, :session_id, session.id))
     end
   end
 
-  @spec insert_event(Plug.Conn.t, String.t, integer) :: no_return
-  defp insert_event(conn, event, session_id) do
+  @spec insert_event(Plug.Conn.t, EventData) :: no_return
+  defp insert_event(conn, data) do
     changeset = Event.changeset(%Event{}, %{
-      name: event,
-      session_id: session_id
+      name: data.event,
+      session_id: data.session_id,
+      properties: data.properties
     })
 
     case Repo.insert(changeset) do
@@ -29,10 +30,10 @@ defmodule Aly.EventController do
     end
   end
 
-  @spec insert_session(Plug.Conn.t, String.t, String.t) :: no_return
-  defp insert_session(conn, event, client_id) do
-    case Repo.insert(Session.changeset(%Session{}, %{client_id: client_id})) do
-      {:ok, session} -> insert_event(conn, event, session.id)
+  @spec insert_session(Plug.Conn.t, EventData) :: no_return
+  defp insert_session(conn, data) do
+    case Repo.insert(Session.changeset(%Session{}, %{client_id: data.session_id})) do
+      {:ok, session} -> insert_event(conn, Map.put(data, :session_id, session.id))
       {:error, _} -> send_resp(conn, 400, "")
     end
   end

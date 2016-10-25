@@ -8,6 +8,7 @@ export interface Header {
 export interface Data {
   event: string;
   session_id: string;
+  properties: Object;
 }
 
 interface Request {

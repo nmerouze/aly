@@ -6,7 +6,7 @@ defmodule Aly.ProjectControllerTest do
   describe "create/2" do
     test "creates event and session", %{conn: conn} do
       data =
-        %EventData{ event: "pageview", session_id: "befvon" }
+        %EventData{ event: "pageview", session_id: "befvon", properties: %{title: "foobar"} }
         |> Poison.encode!
         |> Base.encode64
 
@@ -17,13 +17,14 @@ defmodule Aly.ProjectControllerTest do
       assert event.name == "pageview"
       assert session.client_id == "befvon"
       assert event.session_id == session.id
+      assert event.properties == %{"title" => "foobar"}
     end
 
     test "creates event with existing session", %{conn: conn} do
       session = Repo.insert!(Session.changeset(%Session{}, %{client_id: "befvon"}))
 
       data =
-        %EventData{ event: "pageview", session_id: session.client_id }
+        %EventData{ event: "pageview", session_id: session.client_id, properties: %{title: "foobar"} }
         |> Poison.encode!
         |> Base.encode64
 
@@ -32,6 +33,7 @@ defmodule Aly.ProjectControllerTest do
       event = Repo.one!(Event)
       assert event.name == "pageview"
       assert event.session_id == session.id
+      assert event.properties == %{"title" => "foobar"}
     end
 
     test "fails", %{conn: conn} do
