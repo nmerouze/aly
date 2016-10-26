@@ -1,4 +1,4 @@
-module Chart exposing (..)
+module Chart exposing (main)
 
 import Html exposing (Html, text, div)
 import Html.Attributes exposing (style, class)
@@ -7,13 +7,9 @@ import List exposing (length, map, repeat)
 import String exposing (append)
 import Utils exposing (pct, maxValue)
 
--- Types
-
 type alias Step = { name: String, count: Int }
 type alias Flags = { steps: List Step }
 type alias Model = List Step
-
--- Functions
 
 bar : Int -> Step -> Html String
 bar maxCount =
@@ -26,8 +22,6 @@ bar maxCount =
       , div [class "chart__stepLabel"] [text step.name]
       , div [class "chart__stepValue"] [text value]
       ]
-
--- Rendering
 
 init : Flags -> (Model, Cmd String)
 init flags =
