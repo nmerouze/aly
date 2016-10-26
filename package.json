@@ -11,7 +11,8 @@
     "tracker:watch": "./node_modules/.bin/webpack -w --config webpack.tracker.js",
     "tracker:release": "./node_modules/.bin/webpack -p --config webpack.tracker.js",
     "setup": "npm run build:release && npm run tracker:release",
-    "test": "mocha --opts mocha.opts"
+    "test": "mocha --opts mocha.opts",
+    "test:elm": "cd web/static/elm && elm-test"
   },
   "author": "Nicolas Merouze <nicolas@merouze.me> (https://www.nicolasmerouze.com)",
   "license": "MPL-2.0",

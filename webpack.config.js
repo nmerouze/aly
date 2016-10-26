@@ -18,7 +18,7 @@ module.exports = {
       include: path.resolve(__dirname, 'web/static/scss'),
     }, {
       test: /\.elm$/,
-      include: path.resolve(__dirname, 'web/static/elm'),
+      include: path.resolve(__dirname, 'web/static/elm/src'),
       loader: 'elm-webpack'
     }],
     noParse: /\.elm$/,

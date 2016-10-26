@@ -1,10 +1,11 @@
-module App exposing (..)
+module Chart exposing (..)
 
 import Html exposing (Html, text, div)
 import Html.Attributes exposing (style, class)
 import Html.App exposing (programWithFlags)
-import List exposing (length, map, maximum, repeat)
+import List exposing (length, map, repeat)
 import String exposing (append)
+import Utils exposing (pct, maxValue)
 
 -- Types
 
@@ -14,23 +15,17 @@ type alias Model = List Step
 
 -- Functions
 
-pct : Int -> Int -> String
-pct max value = (toString (ceiling ((toFloat value) * 100 / (toFloat max))))
-
-barView label value =
-  div [style [("height", value)], class "chart__step"]
-  [ div [class "chart__stepBar"] []
-  , div [class "chart__stepLabel"] [text label]
-  , div [class "chart__stepValue"] [text value]
-  ]
-
-bar model =
-  let
-    max = case maximum (map (\n -> n.count) model) of
-      Nothing -> 0
-      Just value -> value
-  in
-    \step -> barView step.name (append (pct max step.count) "%")
+bar : Int -> Step -> Html String
+bar maxCount =
+  \step ->
+    let
+      value = (append (pct maxCount step.count) "%")
+    in
+      div [style [("height", value)], class "chart__step"]
+      [ div [class "chart__stepBar"] []
+      , div [class "chart__stepLabel"] [text step.name]
+      , div [class "chart__stepValue"] [text value]
+      ]
 
 -- Rendering
 
@@ -40,7 +35,14 @@ init flags =
 
 view : Model -> Html String
 view model =
-  div [class "chart"] (map (bar model) model)
+  let
+    maxCount = maxValue (map (\n -> n.count) model)
+  in
+    case maxCount of
+      0 ->
+        div [] []
+      value ->
+        div [class "chart"] (map (bar maxCount) model)
 
 update : String -> Model -> (Model, Cmd String)
 update msg model = (model, Cmd.none)
