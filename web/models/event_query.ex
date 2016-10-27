@@ -8,21 +8,10 @@ defmodule Aly.EventQuery do
   end
 
   def funnel(steps) do
-    params = Enum.map(steps, fn(v) -> v["event"] end)
+    from = "FROM (SELECT session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id) e0"
+    query = "SELECT ARRAY[#{select(steps)}] #{from} #{joins(steps)}"
 
-    select =
-      0..(length(steps) - 1)
-      |> Enum.map(fn(i) -> "SUM(e#{i}.event)" end)
-      |> Enum.join(", ")
-
-    joins =
-      1..(length(steps) - 1)
-      |> Enum.map(fn(i) -> join_lateral(i) end)
-      |> Enum.join(" ")
-
-    query = "SELECT ARRAY[#{select}] #{from} #{joins}"
-
-    Ecto.Adapters.SQL.query!(Aly.Repo, query, params)
+    Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
     |> Map.get(:rows)
     |> Enum.at(0)
     |> Enum.at(0)
@@ -30,11 +19,36 @@ defmodule Aly.EventQuery do
     |> Enum.map(fn({v, i}) -> %{number: i + 1, name: Enum.at(steps, i)["event"], count: v || 0} end)
   end
 
-  defp from do
-    "FROM (SELECT session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id) e0"
+  def funnel(steps, property) do
+    from = "FROM (SELECT properties, session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id, properties) e0"
+    query = "SELECT e0.properties->'#{property}' AS #{property}, ARRAY[#{select(steps)}] #{from} #{joins(steps)} GROUP BY #{property} ORDER BY #{property} ASC"
+
+    Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
+    |> Map.get(:rows)
+    |> Enum.map(fn(v) -> %{property => Enum.at(v, 0), "counts" => unnil(Enum.at(v, 1))} end)
+  end
+
+  defp select(steps) do
+    0..(length(steps) - 1)
+    |> Enum.map(fn(i) -> "SUM(e#{i}.event)" end)
+    |> Enum.join(", ")
+  end
+
+  defp joins(steps) do
+    1..(length(steps) - 1)
+    |> Enum.map(fn(i) -> join_lateral(i) end)
+    |> Enum.join(" ")
+  end
+
+  defp params(steps) do
+    Enum.map(steps, fn(v) -> v["event"] end)
   end
 
   defp join_lateral(step) do
     "LEFT JOIN LATERAL (SELECT 1 AS event, inserted_at AS time FROM events WHERE session_id = e0.session_id AND name = $#{step + 1} AND inserted_at BETWEEN e0.time AND (e0.time + interval '1 hour') ORDER BY inserted_at LIMIT 1) e#{step} ON true"
+  end
+
+  defp unnil(enum) do
+    Enum.map(enum, &(&1 || 0))
   end
 end
