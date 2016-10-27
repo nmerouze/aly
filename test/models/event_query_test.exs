@@ -28,4 +28,18 @@ defmodule Aly.EventQueryTest do
       assert Enum.at(aggregates, 1) == %{number: 2, name: "signup", count: 0}
     end
   end
+
+  describe "properties" do
+    test "get all property keys from a set of events" do
+      session = insert(:session)
+      insert(:event, session: session)
+      insert(:event, session: session)
+      insert(:event, session: session, properties: %{
+        "title" => "test",
+        "other_key" => "test"
+      })
+
+      assert Repo.all(EventQuery.properties) == ["other_key", "title"]
+    end
+  end
 end

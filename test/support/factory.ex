@@ -13,7 +13,10 @@ defmodule Aly.Factory do
 
   def event_factory do
     %Aly.Event{
-      name: "pageview"
+      name: "pageview",
+      properties: %{
+        "title" => "foobar"
+      }
     }
   end
 
