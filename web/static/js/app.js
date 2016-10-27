@@ -1,6 +1,6 @@
-var Elm = require('../elm/src/Chart.elm');
+var Elm = require('../elm/src/Funnel.elm');
 var elmDiv = document.querySelector('.chartContainer');
 var steps = elmDiv.getAttribute('data-steps');
-var elmApp = Elm.Chart.embed(elmDiv, {
+var elmApp = Elm.Funnel.embed(elmDiv, {
   steps: JSON.parse(steps),
 });
