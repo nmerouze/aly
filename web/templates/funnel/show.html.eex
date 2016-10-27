@@ -1,22 +1,2 @@
 <h1>Funnel: <%= @funnel.name %></h1>
-
 <div class="chartContainer" data-steps="<%= encode(@steps) %>"></div>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th class="table__header">Step</th>
-      <th class="table__header">Event</th>
-      <th class="table__header">Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <%= for step <- @steps do %>
-      <tr>
-        <td class="table__cell"><%= step.number %></td>
-        <td class="table__cell"><%= step.name %></td>
-        <td class="table__cell"><%= step.count %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>

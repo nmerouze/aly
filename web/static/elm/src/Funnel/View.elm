@@ -1,6 +1,6 @@
 module Funnel.View exposing (rootView)
 
-import Html exposing (Html, text, div)
+import Html exposing (Html, text, div, table, thead, tbody, tr, th, td)
 import Html.Attributes exposing (style, class)
 import List exposing (map)
 import String exposing (append)
@@ -30,6 +30,30 @@ chartView model =
       value ->
         div [class "chart"] (map (chartBarView maxCount) model)
 
+tableRowView : Step -> Html Msg
+tableRowView step =
+  tr []
+  [ td [class "table__cell"] [text (toString step.number)]
+  , td [class "table__cell"] [text step.name]
+  , td [class "table__cell"] [text (toString step.count)]
+  ]
+
+tableView : Model -> Html Msg
+tableView model =
+  table [class "table"]
+  [ thead []
+    [ tr []
+      [ th [class "table__header"] [text "Step"]
+      , th [class "table__header"] [text "Event"]
+      , th [class "table__header"] [text "Count"]
+      ]
+    ]
+  , tbody [] (map tableRowView model)
+  ]
+
 rootView : Model -> Html Msg
 rootView model =
-  chartView(model)
+  div []
+  [ chartView(model)
+  , tableView(model)
+  ]
