@@ -1,10 +1,10 @@
 module Funnel.State exposing (..)
 
-import Funnel.Types exposing(Flags, Model, Msg)
+import Funnel.Types exposing(Model, Msg)
 
-initialState : Flags -> (Model, Cmd Msg)
-initialState flags =
-  (flags.steps, Cmd.none)
+initialState : Model -> (Model, Cmd Msg)
+initialState model =
+  (model, Cmd.none)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =

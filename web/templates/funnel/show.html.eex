@@ -1,2 +1,6 @@
 <h1>Funnel: <%= @funnel.name %></h1>
-<div class="chartContainer" data-steps="<%= encode(@steps) %>"></div>
+
+<div
+  class="chartContainer"
+  data-funnel="<%= encode(%{steps: @steps, properties: @properties}) %>"
+></div>

@@ -1,7 +1,7 @@
 module Funnel.View exposing (rootView)
 
-import Html exposing (Html, text, div, table, thead, tbody, tr, th, td)
-import Html.Attributes exposing (style, class)
+import Html exposing (Html, text, div, table, thead, tbody, tr, th, td, select, option)
+import Html.Attributes exposing (style, class, value)
 import List exposing (map)
 import String exposing (append)
 import Utils exposing (pct, maxValue)
@@ -22,13 +22,13 @@ chartBarView maxCount =
 chartView : Model -> Html Msg
 chartView model =
   let
-    maxCount = maxValue (map (\n -> n.count) model)
+    maxCount = maxValue (map (\n -> n.count) model.steps)
   in
     case maxCount of
       0 ->
         div [] []
       value ->
-        div [class "chart"] (map (chartBarView maxCount) model)
+        div [class "chart"] (map (chartBarView maxCount) model.steps)
 
 tableRowView : Step -> Html Msg
 tableRowView step =
@@ -48,12 +48,21 @@ tableView model =
       , th [class "table__header"] [text "Count"]
       ]
     ]
-  , tbody [] (map tableRowView model)
+  , tbody [] (map tableRowView model.steps)
   ]
+
+optionView : String -> Html Msg
+optionView property =
+  option [value property] [text property]
+
+selectListView : Model -> Html Msg
+selectListView model =
+  select [] (map optionView ("" :: model.properties))
 
 rootView : Model -> Html Msg
 rootView model =
   div []
   [ chartView(model)
+  , selectListView(model)
   , tableView(model)
   ]
