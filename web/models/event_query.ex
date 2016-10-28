@@ -16,7 +16,7 @@ defmodule Aly.EventQuery do
     |> Enum.at(0)
     |> Enum.at(0)
     |> Enum.with_index
-    |> Enum.map(fn({v, i}) -> %{number: i + 1, name: Enum.at(steps, i)["event"], count: v || 0} end)
+    |> Enum.map(fn({v, i}) -> Map.put(v, "number", i + 1) end)
   end
 
   def funnel(steps, property) do
@@ -25,12 +25,13 @@ defmodule Aly.EventQuery do
 
     Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
     |> Map.get(:rows)
-    |> Enum.map(fn(v) -> %{property => Enum.at(v, 0), "counts" => unnil(Enum.at(v, 1))} end)
+    |> Enum.map(fn(v) -> %{property => Enum.at(v, 0), "steps" => Enum.at(v, 1)} end)
   end
 
   defp select(steps) do
-    0..(length(steps) - 1)
-    |> Enum.map(fn(i) -> "SUM(e#{i}.event)" end)
+    steps
+    |> Enum.with_index
+    |> Enum.map(fn({v, i}) -> "json_build_object('name', '#{v["event"]}', 'count', COALESCE(SUM(e#{i}.event), 0))" end)
     |> Enum.join(", ")
   end
 
@@ -46,9 +47,5 @@ defmodule Aly.EventQuery do
 
   defp join_lateral(step) do
     "LEFT JOIN LATERAL (SELECT 1 AS event, inserted_at AS time FROM events WHERE session_id = e0.session_id AND name = $#{step + 1} AND inserted_at BETWEEN e0.time AND (e0.time + interval '1 hour') ORDER BY inserted_at LIMIT 1) e#{step} ON true"
-  end
-
-  defp unnil(enum) do
-    Enum.map(enum, &(&1 || 0))
   end
 end
