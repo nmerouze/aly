@@ -20,6 +20,12 @@ defmodule Aly.Router do
     resources "/funnels", FunnelController
   end
 
+  scope "/private", Aly do
+    pipe_through :api
+
+    get "/funnels/:id", Private.FunnelController, :show
+  end
+
   scope "/api", Aly do
     pipe_through :api
 
