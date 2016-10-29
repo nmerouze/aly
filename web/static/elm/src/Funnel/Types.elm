@@ -1,5 +1,7 @@
 module Funnel.Types exposing (..)
 
+import Http
+
 type alias Property =
   { name: String
   , value: String
@@ -10,15 +12,21 @@ type alias Item =
   , steps: List Step
   }
 
+type alias ItemList = List Item
+
 type alias Step =
   { name: String
   , count: Int
   }
 
 type alias Model =
-  { steps: List String
-  , data: List Item
+  { id: String
+  , steps: List String
+  , data: ItemList
   , properties: List String
   }
 
-type Msg = String
+type Msg
+  = LoadData String
+  | LoadSucceed ItemList
+  | LoadFail Http.Error

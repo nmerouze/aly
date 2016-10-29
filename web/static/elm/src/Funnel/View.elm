@@ -1,11 +1,14 @@
 module Funnel.View exposing (rootView)
 
-import Html exposing (Html, text, div, table, thead, tbody, tr, th, td, select, option)
-import Html.Attributes exposing (style, class, value)
+import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import List exposing (map, head)
 import String exposing (append)
 import Utils exposing (pct, maxValue)
-import Funnel.Types exposing (Model, Msg, Step, Item)
+import Funnel.Types exposing (..)
+
+-- CHART
 
 chartBarView : Int -> Step -> Html Msg
 chartBarView maxCount =
@@ -34,6 +37,8 @@ chartView model =
       value ->
         div [class "chart"] (map (chartBarView maxCount) steps)
 
+-- TABLE
+
 tableCell : String -> Html Msg
 tableCell value =
   td [class "table__cell"] [text value]
@@ -45,10 +50,6 @@ tableCellView step =
 tableRowView : Item -> Html Msg
 tableRowView item =
   tr [] ((tableCell item.property.value) :: (map tableCellView item.steps))
-  -- [ td [class "table__cell"] [text item.property.value]
-  -- , td [class "table__cell"] [text step.name]
-  -- , td [class "table__cell"] [text (toString step.count)]
-  -- ]
 
 tableHeaderView : String -> Html Msg
 tableHeaderView step =
@@ -63,13 +64,17 @@ tableView model =
   , tbody [] (map tableRowView model.data)
   ]
 
+-- SELECT LIST
+
 optionView : String -> Html Msg
 optionView property =
   option [value property] [text property]
 
 selectListView : Model -> Html Msg
 selectListView model =
-  select [] (map optionView ("" :: model.properties))
+  select [onInput LoadData] (map optionView ("" :: model.properties))
+
+-- CONTAINER
 
 rootView : Model -> Html Msg
 rootView model =
