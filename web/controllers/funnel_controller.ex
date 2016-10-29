@@ -10,9 +10,9 @@ defmodule Aly.FunnelController do
 
   def show(conn, %{"id" => id}) do
     funnel = Repo.get!(Funnel, id)
-    steps = EventQuery.funnel(funnel.steps)
+    data = EventQuery.funnel(funnel.steps)
     properties = Repo.all(EventQuery.properties)
-    render conn, "show.html", funnel: funnel, steps: steps, properties: properties
+    render conn, "show.html", funnel: funnel, data: data, properties: properties
   end
 
   def create(conn, %{"funnel" => funnel}) do

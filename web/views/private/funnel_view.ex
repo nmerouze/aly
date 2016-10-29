@@ -1,7 +1,7 @@
 defmodule Aly.Private.FunnelView do
   use Aly.Web, :view
 
-  def render("show.json", %{properties: properties}) do
-    %{data: properties}
+  def render("show.json", %{data: data}) do
+    %{data: data}
   end
 end

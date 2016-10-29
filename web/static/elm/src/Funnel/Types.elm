@@ -1,5 +1,24 @@
 module Funnel.Types exposing (..)
 
-type alias Step = { number: Int, name: String, count: Int }
-type alias Model = { steps: List Step, properties: List String }
+type alias Property =
+  { name: String
+  , value: String
+  }
+
+type alias Item =
+  { property: Property
+  , steps: List Step
+  }
+
+type alias Step =
+  { name: String
+  , count: Int
+  }
+
+type alias Model =
+  { steps: List String
+  , data: List Item
+  , properties: List String
+  }
+
 type Msg = String

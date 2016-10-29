@@ -2,5 +2,5 @@
 
 <div
   class="chartContainer"
-  data-funnel="<%= encode(%{steps: @steps, properties: @properties}) %>"
+  data-funnel="<%= encode(@funnel, @data, @properties) %>"
 ></div>

@@ -5,7 +5,7 @@ defmodule Aly.Private.FunnelController do
 
   def show(conn, %{"id" => id, "property" => property}) do
     funnel = Repo.get!(Funnel, id)
-    properties = EventQuery.funnel(funnel.steps, property)
-    render conn, "show.json", properties: properties
+    data = EventQuery.funnel(funnel.steps, property)
+    render conn, "show.json", data: data
   end
 end

@@ -9,23 +9,22 @@ defmodule Aly.EventQuery do
 
   def funnel(steps) do
     from = "FROM (SELECT session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id) e0"
-    query = "SELECT ARRAY[#{select(steps)}] #{from} #{joins(steps)}"
+    query = "SELECT json_build_object('property', #{property("", "'Overall'")}, 'steps', ARRAY[#{select(steps)}]) #{from} #{joins(steps)}"
 
     Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
     |> Map.get(:rows)
     |> Enum.at(0)
     |> Enum.at(0)
-    |> Enum.with_index
-    |> Enum.map(fn({v, i}) -> Map.put(v, "number", i + 1) end)
   end
 
   def funnel(steps, property) do
     from = "FROM (SELECT properties, session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id, properties) e0"
-    query = "SELECT e0.properties->'#{property}' AS #{property}, ARRAY[#{select(steps)}] #{from} #{joins(steps)} GROUP BY #{property} ORDER BY #{property} ASC"
+    query = "SELECT e0.properties->'#{property}' AS #{property}, json_build_object('property', #{property(property)}, 'steps', ARRAY[#{select(steps)}]) #{from} #{joins(steps)} GROUP BY #{property} ORDER BY #{property} ASC"
 
     Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
     |> Map.get(:rows)
-    |> Enum.map(fn(v) -> %{property => Enum.at(v, 0), "steps" => Enum.at(v, 1)} end)
+    |> Enum.map(&Enum.at(&1, 1))
+    |> List.insert_at(0, funnel(steps))
   end
 
   defp select(steps) do
@@ -39,6 +38,14 @@ defmodule Aly.EventQuery do
     1..(length(steps) - 1)
     |> Enum.map(fn(i) -> join_lateral(i) end)
     |> Enum.join(" ")
+  end
+
+  defp property(property) do
+    property(property, "e0.properties->'#{property}'")
+  end
+
+  defp property(property, value) do
+    "json_build_object('name', '#{property}', 'value', #{value})"
   end
 
   defp params(steps) do

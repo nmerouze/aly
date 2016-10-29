@@ -7,7 +7,11 @@ defmodule Aly.FunnelView do
     |> Enum.join("\r\n")
   end
 
-  def encode(steps) do
-    Poison.encode!(steps)
+  def encode(funnel, data, properties) do
+    Poison.encode!(%{
+      steps: Enum.map(funnel.steps, fn(v) -> v["event"] end),
+      data: [data],
+      properties: properties
+    })
   end
 end
