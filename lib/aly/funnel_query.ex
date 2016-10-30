@@ -1,13 +1,5 @@
-defmodule Aly.EventQuery do
-  import Ecto.Query, only: [from: 2]
-  alias Aly.Event
-
-  def properties do
-    from e in Event,
-      select: fragment("DISTINCT jsonb_object_keys(?)", e.properties)
-  end
-
-  def funnel(steps) do
+defmodule Aly.FunnelQuery do
+  def data(steps) do
     from = "FROM (SELECT session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id) e0"
     query = "SELECT json_build_object('property', #{property("", "'Overall'")}, 'steps', ARRAY[#{select(steps)}]) #{from} #{joins(steps)}"
 
@@ -17,14 +9,14 @@ defmodule Aly.EventQuery do
     |> Enum.at(0)
   end
 
-  def funnel(steps, property) do
+  def data(steps, property) do
     from = "FROM (SELECT properties, session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id, properties) e0"
     query = "SELECT e0.properties->'#{property}' AS #{property}, json_build_object('property', #{property(property)}, 'steps', ARRAY[#{select(steps)}]) #{from} #{joins(steps)} GROUP BY #{property} ORDER BY #{property} ASC"
 
     Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
     |> Map.get(:rows)
     |> Enum.map(&Enum.at(&1, 1))
-    |> List.insert_at(0, funnel(steps))
+    |> List.insert_at(0, data(steps))
   end
 
   defp select(steps) do

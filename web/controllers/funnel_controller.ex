@@ -1,7 +1,7 @@
 defmodule Aly.FunnelController do
   use Aly.Web, :controller
 
-  alias Aly.{Funnel, EventQuery}
+  alias Aly.{Funnel, EventQuery, FunnelQuery}
 
   def new(conn, _params) do
     changeset = Funnel.changeset(%Funnel{}, %{steps: []})
@@ -10,7 +10,7 @@ defmodule Aly.FunnelController do
 
   def show(conn, %{"id" => id}) do
     funnel = Repo.get!(Funnel, id)
-    data = EventQuery.funnel(funnel.steps)
+    data = FunnelQuery.data(funnel.steps)
     properties = Repo.all(EventQuery.properties)
     render conn, "show.html", funnel: funnel, data: data, properties: properties
   end
