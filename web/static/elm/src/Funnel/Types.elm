@@ -16,7 +16,7 @@ type alias ItemList = List Item
 
 type alias Step =
   { name: String
-  , count: Int
+  , value: Int
   }
 
 type alias Model =

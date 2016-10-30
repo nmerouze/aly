@@ -30,7 +30,7 @@ defmodule Aly.EventQuery do
   defp select(steps) do
     steps
     |> Enum.with_index
-    |> Enum.map(fn({v, i}) -> "json_build_object('name', '#{v["event"]}', 'count', COALESCE(SUM(e#{i}.event), 0))" end)
+    |> Enum.map(fn({v, i}) -> "json_build_object('name', '#{v["event"]}', 'value', COALESCE(SUM(e#{i}.event), 0))" end)
     |> Enum.join(", ")
   end
 

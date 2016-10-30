@@ -54,4 +54,4 @@ decodeStep =
   object2
     Step
     ("name" := string)
-    ("count" := int)
+    ("value" := int)

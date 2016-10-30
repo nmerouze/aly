@@ -14,7 +14,7 @@ chartBarView : Int -> Step -> Html Msg
 chartBarView maxCount =
   \step ->
     let
-      value = (append (pct maxCount step.count) "%")
+      value = (append (pct maxCount step.value) "%")
     in
       div [style [("height", value)], class "chart__step"]
       [ div [class "chart__stepBar"] []
@@ -29,7 +29,7 @@ chartView model =
       case (head model.data) of
         Nothing -> []
         Just value -> value.steps
-    maxCount = maxValue (map (\n -> n.count) steps)
+    maxCount = maxValue (map (\n -> n.value) steps)
   in
     case maxCount of
       0 ->
@@ -45,7 +45,7 @@ tableCell value =
 
 tableCellView : Step -> Html Msg
 tableCellView step =
-  tableCell(toString step.count)
+  tableCell(toString step.value)
 
 tableRowView : Item -> Html Msg
 tableRowView item =

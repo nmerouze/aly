@@ -15,16 +15,16 @@ defmodule Aly.EventQueryTest do
 
       assert EventQuery.funnel(funnel.steps) == %{
         "property" => %{"name" => "", "value" => "Overall"},
-        "steps" => [%{"name" => "pageview", "count" => 2}, %{"name" => "signup", "count" => 1}]
+        "steps" => [%{"name" => "pageview", "value" => 2}, %{"name" => "signup", "value" => 1}]
       }
     end
 
-    test "aggregates to have a default count to 0" do
+    test "aggregates to have a default value to 0" do
       funnel = insert(:funnel)
 
       assert EventQuery.funnel(funnel.steps) == %{
         "property" => %{"name" => "", "value" => "Overall"},
-        "steps" => [%{"name" => "pageview", "count" => 0}, %{"name" => "signup", "count" => 0}]
+        "steps" => [%{"name" => "pageview", "value" => 0}, %{"name" => "signup", "value" => 0}]
       }
     end
 
@@ -42,15 +42,15 @@ defmodule Aly.EventQueryTest do
       assert length(aggregates) == 3
       assert Enum.at(aggregates, 0) == %{
         "property" => %{"name" => "", "value" => "Overall"},
-        "steps" => [%{"name" => "pageview", "count" => 2}, %{"name" => "signup", "count" => 1}]
+        "steps" => [%{"name" => "pageview", "value" => 2}, %{"name" => "signup", "value" => 1}]
       }
       assert Enum.at(aggregates, 1) == %{
         "property" => %{"name" => "title", "value" => "foobar"},
-        "steps" => [%{"name" => "pageview", "count" => 1}, %{"name" => "signup", "count" => 1}]
+        "steps" => [%{"name" => "pageview", "value" => 1}, %{"name" => "signup", "value" => 1}]
       }
       assert Enum.at(aggregates, 2) == %{
         "property" => %{"name" => "title", "value" => "test"},
-        "steps" => [%{"name" => "pageview", "count" => 1}, %{"name" => "signup", "count" => 0}]
+        "steps" => [%{"name" => "pageview", "value" => 1}, %{"name" => "signup", "value" => 0}]
       }
     end
   end
