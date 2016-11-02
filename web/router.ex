@@ -30,5 +30,6 @@ defmodule Aly.Router do
     pipe_through :api
 
     post "/events", EventController, :create
+    post "/users", Public.UserController, :create
   end
 end

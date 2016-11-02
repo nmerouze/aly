@@ -1,10 +1,10 @@
-defmodule Aly.ProjectControllerTest do
+defmodule Aly.EventControllerTest do
   use Aly.ConnCase, async: true
 
   alias Aly.{Repo, Event, EventData}
 
   describe "create/2" do
-    test "creates event and session", %{conn: conn} do
+    test "creates event", %{conn: conn} do
       data =
         %EventData{event: "pageview", user_id: "befvon", properties: %{title: "foobar"}}
         |> Poison.encode!
