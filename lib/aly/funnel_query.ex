@@ -1,6 +1,6 @@
 defmodule Aly.FunnelQuery do
   def data(steps) do
-    from = "FROM (SELECT session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id) e0"
+    from = "FROM (SELECT user_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY user_id) e0"
     query = "SELECT json_build_object('property', #{property("", "'Overall'")}, 'steps', ARRAY[#{select(steps)}]) #{from} #{joins(steps)}"
 
     Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
@@ -10,7 +10,7 @@ defmodule Aly.FunnelQuery do
   end
 
   def data(steps, property) do
-    from = "FROM (SELECT properties, session_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY session_id, properties) e0"
+    from = "FROM (SELECT properties, user_id, 1 AS event, MIN(inserted_at) AS time FROM events WHERE name = $1 GROUP BY user_id, properties) e0"
     query = "SELECT e0.properties->'#{property}' AS #{property}, json_build_object('property', #{property(property)}, 'steps', ARRAY[#{select(steps)}]) #{from} #{joins(steps)} GROUP BY #{property} ORDER BY #{property} ASC"
 
     Ecto.Adapters.SQL.query!(Aly.Repo, query, params(steps))
@@ -45,6 +45,6 @@ defmodule Aly.FunnelQuery do
   end
 
   defp join_lateral(step) do
-    "LEFT JOIN LATERAL (SELECT 1 AS event, inserted_at AS time FROM events WHERE session_id = e0.session_id AND name = $#{step + 1} AND inserted_at BETWEEN e0.time AND (e0.time + interval '1 hour') ORDER BY inserted_at LIMIT 1) e#{step} ON true"
+    "LEFT JOIN LATERAL (SELECT 1 AS event, inserted_at AS time FROM events WHERE user_id = e0.user_id AND name = $#{step + 1} AND inserted_at BETWEEN e0.time AND (e0.time + interval '1 hour') ORDER BY inserted_at LIMIT 1) e#{step} ON true"
   end
 end

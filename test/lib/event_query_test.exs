@@ -6,10 +6,9 @@ defmodule Aly.EventQueryTest do
 
   describe "properties" do
     test "get all property keys from a set of events" do
-      session = insert(:session)
-      insert(:event, session: session)
-      insert(:event, session: session)
-      insert(:event, session: session, properties: %{
+      insert(:event, user_id: "1")
+      insert(:event, user_id: "1")
+      insert(:event, user_id: "1", properties: %{
         "title" => "test",
         "other_key" => "test"
       })

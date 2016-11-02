@@ -7,11 +7,9 @@ defmodule Aly.FunnelQueryTest do
   describe "funnel" do
     test "aggregates events for each funnel step" do
       funnel = insert(:funnel)
-      session1 = insert(:session)
-      session2 = insert(:session, client_id: "123abc")
-      insert(:event, session: session1)
-      insert(:event, name: "signup", session: session1)
-      insert(:event, session: session2)
+      insert(:event, user_id: "1")
+      insert(:event, name: "signup", user_id: "1")
+      insert(:event, user_id: "2")
 
       assert FunnelQuery.data(funnel.steps) == %{
         "property" => %{"name" => "", "value" => "Overall"},
@@ -30,11 +28,9 @@ defmodule Aly.FunnelQueryTest do
 
     test "aggregates events and groups by property" do
       funnel = insert(:funnel)
-      session1 = insert(:session)
-      session2 = insert(:session, client_id: "123abc")
-      insert(:event, session: session1)
-      insert(:event, name: "signup", session: session1)
-      insert(:event, session: session2, properties: %{
+      insert(:event, user_id: "1")
+      insert(:event, name: "signup", user_id: "1")
+      insert(:event, user_id: "2", properties: %{
         "title" => "test"
       })
 

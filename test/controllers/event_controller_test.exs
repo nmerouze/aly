@@ -1,30 +1,12 @@
 defmodule Aly.ProjectControllerTest do
   use Aly.ConnCase, async: true
 
-  alias Aly.{Repo, Event, Session, EventData}
+  alias Aly.{Repo, Event, EventData}
 
   describe "create/2" do
     test "creates event and session", %{conn: conn} do
       data =
-        %EventData{ event: "pageview", session_id: "befvon", properties: %{title: "foobar"} }
-        |> Poison.encode!
-        |> Base.encode64
-
-      response = post(conn, "/api/events", %{"data" => data})
-      assert response.status == 201
-      event = Repo.one!(Event)
-      session = Repo.get!(Session, event.session_id)
-      assert event.name == "pageview"
-      assert session.client_id == "befvon"
-      assert event.session_id == session.id
-      assert event.properties == %{"title" => "foobar"}
-    end
-
-    test "creates event with existing session", %{conn: conn} do
-      session = Repo.insert!(Session.changeset(%Session{}, %{client_id: "befvon"}))
-
-      data =
-        %EventData{ event: "pageview", session_id: session.client_id, properties: %{title: "foobar"} }
+        %EventData{event: "pageview", user_id: "befvon", properties: %{title: "foobar"}}
         |> Poison.encode!
         |> Base.encode64
 
@@ -32,18 +14,18 @@ defmodule Aly.ProjectControllerTest do
       assert response.status == 201
       event = Repo.one!(Event)
       assert event.name == "pageview"
-      assert event.session_id == session.id
+      assert event.user_id == "befvon"
       assert event.properties == %{"title" => "foobar"}
     end
 
     test "fails", %{conn: conn} do
       data1 =
-        %EventData{ session_id: "befvon", event: "" }
+        %EventData{user_id: "befvon", event: ""}
         |> Poison.encode!
         |> Base.encode64
 
       data2 =
-        %EventData{ session_id: "", event: "pageview" }
+        %EventData{user_id: "", event: "pageview"}
         |> Poison.encode!
         |> Base.encode64
 

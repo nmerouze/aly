@@ -3,12 +3,12 @@ defmodule Aly.Event do
 
   schema "events" do
     field :name, :string
+    field :user_id, :string
     field :properties, :map
-    belongs_to :session, Aly.Session
     timestamps
   end
 
-  @required_fields ~w(name session_id)
+  @required_fields ~w(name user_id)
   @optional_fields ~w(properties)
 
   def changeset(struct, params \\ %{}) do

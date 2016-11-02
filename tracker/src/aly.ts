@@ -7,7 +7,7 @@ export interface Header {
 
 export interface Data {
   event: string;
-  session_id: string;
+  user_id: string;
   properties: Object;
 }
 

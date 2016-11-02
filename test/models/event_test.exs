@@ -3,7 +3,7 @@ defmodule Aly.EventTest do
 
   alias Aly.Event
 
-  @valid_attrs %{name: "foobar", session_id: 3}
+  @valid_attrs %{name: "foobar", user_id: "test"}
   @invalid_attrs %{}
 
   test "changeset with valid attributes" do

@@ -19,10 +19,4 @@ defmodule Aly.Factory do
       }
     }
   end
-
-  def session_factory do
-    %Aly.Session{
-      client_id: "abc123"
-    }
-  end
 end

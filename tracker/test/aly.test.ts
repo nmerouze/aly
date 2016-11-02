@@ -8,7 +8,7 @@ describe("aly", () => {
   it('sends a request to API', () => {
     const data = {
       event: "pageview",
-      session_id: "abc123",
+      user_id: "abc123",
       properties: {
         title: "foobar",
       }
